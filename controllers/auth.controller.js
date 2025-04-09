@@ -26,7 +26,7 @@ const register = async (req, res) => {
         });
 
         await user.save();
-        sendEmail(email, 'Welcome to Buildeo', `Hello ${firstName}, welcome to Buildeo! Hope you enjoy our services.`);
+        sendEmail(email, 'Welcome to Buildeo!', `Hello ${firstName}, welcome to Buildeo! Hope you enjoy our services.`);
         res.status(201).json({message: 'User created successfully', user});
     } catch (error) {
         console.error('Error:', error);

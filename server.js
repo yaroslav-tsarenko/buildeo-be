@@ -12,7 +12,7 @@ const chatRoutes = require('./routes/chat.route');
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 5555;
-const allowedOrigins = ["http://localhost:3000, https://buildeo.vercel.app"];
+const allowedOrigins = ["http://localhost:3000", "https://buildeo.vercel.app"];
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
