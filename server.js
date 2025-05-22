@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth.route');
 const userRoutes = require('./routes/user.route');
 const serviceRoutes = require('./routes/service.route');
 const chatRoutes = require('./routes/chat.route');
+const propertyRoutes = require('./routes/property.route');
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 5555;
@@ -41,6 +42,7 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/service', serviceRoutes);
 app.use('/chat', chatRoutes);
+app.use('/property', propertyRoutes);
 
 server.listen(port, () => {
     console.log(`Server running on port ${port}✅ `);

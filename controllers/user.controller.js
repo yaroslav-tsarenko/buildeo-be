@@ -17,6 +17,16 @@ const getUser = async (req, res) => {
 };
 
 
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({}, { password: 0 });
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ error: "Failed to fetch users" });
+    }
+};
+
 const uploadAvatar = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -42,7 +52,39 @@ const uploadAvatar = async (req, res) => {
     }
 };
 
+const updateUser = async (req, res) => {
+    const { id } = req.params;
+    const { firstName, lastName, role } = req.body;
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { firstName, lastName, role },
+            { new: true }
+        );
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ error: "Failed to update user" });
+    }
+};
+
+const deleteUser = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await User.findByIdAndDelete(id);
+        res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ error: "Failed to delete user" });
+    }
+};
+
 module.exports = {
     getUser,
-    uploadAvatar
+    uploadAvatar,
+    getAllUsers,
+    updateUser,
+    deleteUser
 };
