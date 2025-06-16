@@ -9,12 +9,12 @@ const messageSchema = new mongoose.Schema({
 const chatSchema = new mongoose.Schema({
     sellerId: { type: String, required: true },
     buyerId: { type: String, required: true },
+    sellerFullName: { type: String },
+    buyerFullName: { type: String },
     sellerAvatar: { type: String },
     buyerAvatar: { type: String },
     messages: [messageSchema],
     createdAt: { type: Date, default: Date.now },
 });
 
-const Chat = mongoose.model('Chat', chatSchema);
-
-module.exports = Chat;
+module.exports = mongoose.models.Chat || mongoose.model('Chat', chatSchema);

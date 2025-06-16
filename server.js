@@ -13,6 +13,7 @@ const propertyRoutes = require('./routes/property.route');
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 5555;
+const { Server } = require("socket.io");
 const allowedOrigins = ["http://localhost:3000", "https://buildeo.vercel.app"];
 
 app.use(express.json());
@@ -43,6 +44,39 @@ app.use('/user', userRoutes);
 app.use('/service', serviceRoutes);
 app.use('/chat', chatRoutes);
 app.use('/property', propertyRoutes);
+
+const io = new Server(server, {
+    cors: {
+        origin: allowedOrigins,
+        methods: ["GET", "POST"],
+        credentials: true,
+    },
+});
+
+io.on("connection", (socket) => {
+    console.log("🟢 A user connected:", socket.id);
+
+    socket.on("sendMessage", async (data) => {
+        const { chatId, sender, text, createdAt } = data;
+
+        try {
+            const chat = await Chat.findById(chatId);
+            if (!chat) return;
+
+            const message = { sender, text, createdAt: new Date(createdAt) };
+            chat.messages.push(message);
+            await chat.save();
+
+            io.emit("receiveMessage", { chatId, message }); 
+        } catch (err) {
+            console.error("Error saving message:", err);
+        }
+    });
+
+    socket.on("disconnect", () => {
+        console.log("🔴 User disconnected:", socket.id);
+    });
+});
 
 server.listen(port, () => {
     console.log(`Server running on port ${port}✅ `);

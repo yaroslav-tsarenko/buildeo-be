@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon ../buildeo/backend/server.js"
   },
   "dependencies": {
     "aws-sdk": "^2.1692.0",
@@ -21,6 +21,7 @@
     "multer": "^1.4.5-lts.2",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "socket.io": "^4.8.1"
   }
 }

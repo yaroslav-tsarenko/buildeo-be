@@ -1,28 +1,36 @@
 const Chat = require('../models/chat.model');
 const User = require('../models/user.model');
 const Service = require('../models/service.model');
+const Property = require('../models/property.model');
 
 const createChat = async (req, res) => {
     try {
-        const { role, userId, serviceId, text } = req.body;
+        const { role, userId, type, serviceId, propertyId, text } = req.body;
 
-        if (!role || !userId || !serviceId || !text) {
+        if (!role || !userId || !type || !text || (type === 'service' && !serviceId) || (type === 'property' && !propertyId)) {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        const service = await Service.findById(serviceId);
-        if (!service) {
-            return res.status(404).json({ error: 'Service not found' });
+        let entity, entityUserId;
+        if (type === 'service') {
+            entity = await Service.findById(serviceId);
+            if (!entity) return res.status(404).json({ error: 'Service not found' });
+            entityUserId = entity.userId;
+        } else if (type === 'property') {
+            entity = await Property.findById(propertyId);
+            if (!entity) return res.status(404).json({ error: 'Property not found' });
+            entityUserId = entity.userId;
+        } else {
+            return res.status(400).json({ error: 'Invalid type' });
         }
 
         let sellerId, buyerId;
-
         if (role === 'buyer') {
             buyerId = userId;
-            sellerId = service.userId;
+            sellerId = entityUserId;
         } else if (role === 'seller') {
             sellerId = userId;
-            buyerId = service.userId;
+            buyerId = entityUserId;
         } else {
             return res.status(400).json({ error: 'Invalid role' });
         }
@@ -39,6 +47,8 @@ const createChat = async (req, res) => {
             buyerId,
             sellerAvatar: seller.avatar,
             buyerAvatar: buyer.avatar,
+            sellerFullName: `${seller.firstName} ${seller.lastName}`,
+            buyerFullName: `${buyer.firstName} ${buyer.lastName}`,
             messages: [
                 {
                     sender: role,
@@ -47,6 +57,7 @@ const createChat = async (req, res) => {
                 },
             ],
         });
+
 
         await newChat.save();
         res.status(201).json(newChat);
@@ -74,5 +85,33 @@ const getChats = async (req, res) => {
     }
 };
 
+const sendMessage = async (req, res) => {
+    const { chatId, sender, text } = req.body;
 
-module.exports = { createChat, getChats };
+    if (!chatId || !sender || !text) {
+        return res.status(400).json({ error: 'chatId, sender, and text are required' });
+    }
+
+    try {
+        const chat = await Chat.findById(chatId);
+        if (!chat) return res.status(404).json({ error: 'Chat not found' });
+
+        const message = {
+            sender,
+            text,
+            createdAt: new Date(),
+        };
+
+        chat.messages.push(message);
+        await chat.save();
+
+        res.status(200).json({ message });
+    } catch (error) {
+        console.error('Error saving message:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
+
+module.exports = { createChat, getChats, sendMessage };
