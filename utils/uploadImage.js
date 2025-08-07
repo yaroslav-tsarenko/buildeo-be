@@ -2,9 +2,9 @@ require('dotenv').config();
 const AWS = require('aws-sdk');
 
 const s3 = new AWS.S3({
-    endpoint: "https://351efc4ab41db8b9c50631315063682f.r2.cloudflarestorage.com",
-    accessKeyId: "f0576931b32e30002db9a3ac4a531193",
-    secretAccessKey: "9a7707eedca5c4c35bae4563b8f7c3c17f430b5f455df45c6eafe4f3b7f95d8b",
+    endpoint: process.env.AWS_ENDPOINT,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     signatureVersion: 'v4',
     s3ForcePathStyle: true,
 });
@@ -13,7 +13,7 @@ const uploadImage = async (buffer, fileName, mimetype = 'application/octet-strea
     if (!buffer) throw new Error("Buffer is missing");
 
     const params = {
-        Bucket: "images",
+        Bucket: process.env.AWS_BUCKET,
         Key: fileName,
         Body: buffer,
         ContentType: mimetype,

@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const Property = require("../models/property.model");
-const { uploadImage } = require("../utils/uploadImage");
+const Property = require("../../buildeo/backend/models/property.model");
+const { uploadImage } = require("../../buildeo/backend/utils/uploadImage");
 
-const User = require("../models/user.model");
+const User = require("../../buildeo/backend/models/user.model");
 
 const createProperty = async (req, res) => {
     try {

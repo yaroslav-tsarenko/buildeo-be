@@ -1,7 +1,7 @@
-const Chat = require('../models/chat.model');
-const User = require('../models/user.model');
-const Service = require('../models/service.model');
-const Property = require('../models/property.model');
+const Chat = require('../../buildeo/backend/models/chat.model');
+const User = require('../../buildeo/backend/models/user.model');
+const Service = require('../../buildeo/backend/models/service.model');
+const Property = require('../../buildeo/backend/models/property.model');
 
 const createChat = async (req, res) => {
     try {
