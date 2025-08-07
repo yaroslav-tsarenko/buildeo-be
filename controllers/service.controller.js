@@ -1,6 +1,6 @@
-const Service = require('../../buildeo/backend/models/service.model');
-const User = require('../../buildeo/backend/models/user.model');
-const { uploadImage } = require('../../buildeo/backend/utils/uploadImage');
+const Service = require('../models/service.model');
+const User = require('../models/user.model');
+const { uploadImage } = require('../utils/uploadImage');
 const mongoose = require('mongoose');
 
 const createService = async (req, res) => {
