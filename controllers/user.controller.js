@@ -1,5 +1,5 @@
-const User = require('../../buildeo/backend/models/user.model');
-const {uploadImage} = require("../../buildeo/backend/utils/uploadImage");
+const User = require('../models/user.model');
+const {uploadImage} = require("../utils/uploadImage");
 const mongoose = require('mongoose');
 
 const getUser = async (req, res) => {

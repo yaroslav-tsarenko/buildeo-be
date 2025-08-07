@@ -1,6 +1,6 @@
-const User = require('../../buildeo/backend/models/user.model');
+const User = require('../models/user.model');
 const jwt = require('jsonwebtoken');
-const sendEmail = require("../../buildeo/backend/utils/sendEmail");
+const sendEmail = require("../utils/sendEmail");
 const JWT_SECRET = process.env.SECRET_KEY;
 
 const register = async (req, res) => {
